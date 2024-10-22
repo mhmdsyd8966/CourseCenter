@@ -1,0 +1,33 @@
+﻿@model Core.Dto.LoginModel;
+<form id="LoginForm" asp-action="SignIn">
+<div class="form-group">
+        @if (ViewBag.Error!=null)
+        {
+            <span class="text-danger">@ViewBag.Error</span>
+            <br />
+        }
+        <label for="exampleInputEmail1">Email address</label>
+        <input type="email" class="form-control" id="exampleInputEmail1"  asp-for="Email" aria-describedby="emailHelp" placeholder="Enter email">
+        <span asp-validation-for="@Model.Email" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="exampleInputPassword1">Password</label>
+        <input type="password" class="form-control" asp-for="Password" id="exampleInputPassword1" placeholder="Password">
+        <span asp-validation-for="@Model.Password" class="text-danger"></span>
+    </div>
+    <div class="form-check">
+        <input type="checkbox" asp-for="IspPresistant" class="form-check-input" id="exampleCheck1">
+        <label class="form-check-label" asp-for="IspPresistant" for="exampleCheck1">Check me out</label>
+    </div>
+    <div>
+    <select class="form-select" asp-for="Role" aria-label="Default select example">
+
+    <option ></option>
+    <option value="Admin">Admin</option>
+    <option value="Student">Student</option>
+    <option value="Teacher">Teacher</option>
+</select>
+    <span asp-validation-for="@Model.Role" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary" id="login">Submit</button>
+</form>

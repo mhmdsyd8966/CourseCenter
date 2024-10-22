@@ -1,0 +1,32 @@
+﻿@model List<Core.Models.Course>
+@if (User.IsInRole("Admin"))
+{
+	<a  asp-controller="Course" asp-action="AddCourse" class="btn btn-primary">Add Course</a>
+}
+<span class="text-danger">@ViewBag.Error</span>
+<div class="flex-column w-100">
+	@foreach(var course in Model)
+	{
+		<form id="UpdateForm" asp-action="DeleteCourse" asp-controller="Course" >
+		<div class="card " >
+			<div class="card-body">
+				<h5 class="card-title">@course.Name</h5>
+				<p class="card-text">Number of Teachers: @course.NumberofTeachers</p>
+				<p class="card-text">Number of Students: @course.NumberOfStudents</p>
+				@if (User.IsInRole("Student"))
+				{
+					<a asp-controller="Course" asp-action="AddCourseToStudent" class="btn btn-primary">Add Course</a>
+				}
+				@if (User.IsInRole("Admin"))
+				{
+					<a asp-controller="Course" asp-action="UpdateCourse" asp-route-id="@course.Id" class="btn btn-dark">edit Course</a>
+					<button asp-controller="Course" asp-action="DeleteCourse" asp-route-id="@course.Id" class="btn btn-danger">Delete Course</button>
+				}
+				
+				
+			</div>
+		</div>
+		</form>
+	}
+	
+</div>

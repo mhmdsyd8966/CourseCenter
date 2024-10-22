@@ -1,0 +1,8 @@
+﻿@model Core.Dto.CourseDto
+
+<form id="UpdateForm" asp-action="UpdateCourse" asp-controller="Course" >
+	<span asp-validation-for="@Model.Name" class="text-danger"></span>
+	<span class="text-black">Enter New Name To Course</span>
+	<input class="input-group-text" asp-for="@Model.Name"  />
+	<button class="btn btn-primary" asp-action="UpdateCourse" asp-controller="Course">Edit </button>
+</form>

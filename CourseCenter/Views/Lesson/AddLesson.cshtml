@@ -1,0 +1,44 @@
+﻿@model CourseCenter.Models.AddLessonDto
+<form id="SignUpTeacher" onsubmit="AJAXSubmit(this);return false;" method="post" encrypt="multipart/form-data">
+    <div class="form-group">
+        <label>Name</label>
+        <input type="text" class="form-control" id="LessonName" asp-for="Name" />
+
+    </div>
+    <div class="form-group">
+        <label>Description</label>
+        <input type="text" class="form-control" id="LessonDescription" asp-for="Description" />
+
+    </div>
+    <div class="form-group">
+        <label>VideoLink</label>
+        <input type="text" class="form-control" id="VideoLink" asp-for="VideoLink" />
+
+    </div>
+    <div class="form-group">
+        <label for="Photo">Photo</label>
+        <input type="file" class="form-control" asp-for="Photo" id="Photo">
+    </div>
+    <button type="submit" class="btn btn-primary" asp-action="AddLesson" asp-controller="Lesson" id="AddLesson">Submit</button>
+</form>
+
+<script>
+    async function AJAXSubmit(oFormElement) {
+        const formData = new FormData(oFormElement);
+
+        try {
+            const response = await fetch(oFormElement.action, {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                window.location.href = '/';
+            }
+
+           
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+</script>

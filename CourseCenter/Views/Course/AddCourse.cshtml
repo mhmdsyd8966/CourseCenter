@@ -1,0 +1,15 @@
+﻿@model Core.Dto.CourseDto
+<form id="AddCourseForm" asp-action="AddCourse">
+	@if (ViewBag.Error != null)
+	{
+		<span class="text-danger">@ViewBag.Error</span>
+		<br />
+	}
+	<div class="form-group">
+		<label for="CourseName">Couse Name</label>
+		<input asp-for="@Model.Name"  class="input-group" />
+		<span asp-validation-for="@Model.Name" class="text-danger"></span>
+	</div>
+	<br />
+	<button class="btn btn-primary" asp-action="AddCourse" asp-controller="Course">Add</button>
+</form>

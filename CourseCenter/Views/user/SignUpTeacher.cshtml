@@ -1,0 +1,75 @@
+﻿@model CourseCenter.Models.SignUpTeacherDto
+
+<form id="SignUpTeacher" onsubmit="AJAXSubmit(this);return false;" method="post" encrypt="multipart/form-data">
+    <div class="form-group">
+        <label for="exampleInputEmail1">Email address</label>
+        <input type="email" class="form-control" id="exampleInputEmail1" asp-for="email" aria-describedby="emailHelp" placeholder="Enter email">
+        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+    </div>
+    <div class="form-group">
+        <label for="exampleInputPassword1">Password</label>
+        <input type="password" class="form-control" id="exampleInputPassword1" asp-for="password" placeholder="Password">
+    </div>
+    <div class="form-group">
+        <label for="firstname">First Name</label>
+        <input type="text" class="form-control" id="firstname" asp-for="FirstName" placeholder="FirstName">
+    </div>
+
+    <br />          
+    <div class="form-group">
+        <label for="lastname">Last Name</label>
+        <input type="text" class="form-control" id="lastname" asp-for="LastName" placeholder="LastName">
+    </div>
+
+    <br />
+    <div class="form-group">
+        <label for="PhoneNumber">Phone Number</label>
+        <input type="text" class="form-control" asp-for="phoneNumber" id="PhoneNumber" placeholder="Phone Number">
+    </div>
+
+    <br />
+    <div class="form-group">
+        <label for="Photo">Photo</label>
+        <input type="file"  class="form-control" asp-for="Photo" id="Photo" >
+    </div>
+    <br />
+    <div class="form-group">
+        <select class="form-select" asp-for="CourseId">
+
+            <option>Choose Course</option>
+            @foreach(var Course in ViewBag.Courses)
+            {
+                <option value="@Course.Id">@Course.Name</option>
+            }
+
+
+		</select><a href="d:\coursecenter\coursecenter\views\user\signupteacher.cshtml">d:\coursecenter\coursecenter\views\user\signupteacher.cshtml</a>
+    </div>
+
+    <br />
+
+
+    <button type="submit" class="btn btn-primary" asp-action="SignUpTeacher" asp-controller="user" id="signup">Submit</button>
+</form>
+
+<script>
+    async function AJAXSubmit(oFormElement) {
+        var resultElement = oFormElement.elements.namedItem("result");
+        const formData = new FormData(oFormElement);
+
+        try {
+            const response = await fetch(oFormElement.action, {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                window.location.href = '/';
+            }
+
+           
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+</script>

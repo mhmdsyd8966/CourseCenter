@@ -1,0 +1,52 @@
+﻿@model CourseCenter.Models.AddLessonDto
+
+<form id="UpdateLesson" asp-action="UpdateLesson" asp-controller="Lesson" asp-route-id="@ViewBag.Id">
+    <div class="form-group">
+        <label>Name</label>
+        <input type="text" class="form-control" id="LessonName" asp-for="Name" />
+
+    </div>
+    <div class="form-group">
+        <label>Description</label>
+        <input type="text" class="form-control" id="LessonDescription" asp-for="Description" />
+
+    </div>
+    <div class="form-group">
+        <label>VideoLink</label>
+        <input type="text" class="form-control" id="VideoLink" asp-for="VideoLink" />
+
+    </div>
+    <div class="form-group">
+        <label for="Photo">Photo</label>
+        <input type="file" class="form-control" asp-for="Photo" id="Photo">
+    </div>
+    <button type="submit" class="btn btn-dark" asp-action="UpdateLesson" asp-controller="Lesson" asp-route-id="@ViewBag.Id" id="updateLesson">Update</button>
+</form>
+
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#UpdateLesson").on("submit", (e) => {
+                e.preventDefault();
+                const form = document.getElementById("UpdateLesson");
+                const formData = new FormData(form);
+
+                $.ajax({
+                    type: "PUT",
+                    url: '@Url.Action("UpdateLesson", "Lesson")',
+                    data: formData,
+                    processData: false, // Important: prevent jQuery from transforming the data
+                    contentType: false, // Important: prevent jQuery from setting the content type
+                    success: () => {
+                        window.location.href = "/"; // Corrected location
+                    },
+                    error: () => {
+                        // Handle error
+                    }
+                });
+            });
+        });
+    </script>
+}

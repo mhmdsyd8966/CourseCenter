@@ -1,0 +1,89 @@
+﻿	@model List<Core.Models.Lesson>
+
+@if(ViewBag.Error != null)
+{
+	<div class="text-danger">@ViewBag.Error</div>
+}
+
+
+
+
+@if ((User.IsInRole("Teacher") && ViewBag.TeacherId == ViewBag.Id) || (User.IsInRole("Student") && ViewBag.Teacher == true))
+{
+	if ((User.IsInRole("Teacher") && ViewBag.TeacherId == ViewBag.Id))
+	{
+
+		<a class="btn btn-primary" asp-action="AddLesson" asp-controller="Lesson">Add New Lesson</a>
+	}
+
+	<div class="d-flex flex-row">
+		@if (Model == null)
+		{
+			<span class="text-danger">There is no lessons</span>
+		}
+		else
+		{
+				@foreach (var lesson in Model)
+				{
+					<div class="card" style="width: 18rem;">
+						<img class="card-img-top" src="/@lesson.Photo" alt="Card image cap">
+						<div class="card-body">
+							<h3>@lesson.Name</h3>
+							<p class="card-text">@lesson.Description</p>
+						</div>
+						@if (ViewBag.TeacherId == ViewBag.Id)
+						{
+						
+								<input type="hidden" name="id" value="@lesson.Id" />
+								<a class="btn btn-primary" asp-action="GetLesson" asp-controller="Lesson" asp-route-id="@lesson.Id">View Lesson</a>
+						@if (User.IsInRole("Teacher"))
+						{
+							<a class="btn btn-dark" asp-action="UpdateLesson" asp-controller="Lesson" asp-route-id="@lesson.Id">Edit Lesson</a>
+
+							<form id="DeleteLesson-@lesson.Id">
+								<input hidden id="lessonId" name="lessonId" value="@lesson.Id" />
+								<button  class="btn btn-danger">Delete Lesson</button>
+							</form>
+						}
+						
+						
+
+
+						}
+					</div>
+
+				}
+			}
+		
+		</div>
+	}
+@section Scripts {
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script>
+
+		$(document).ready(function () {
+			$("form[id^='DeleteLesson-']").on("submit", function (e) {
+				e.preventDefault();
+				const form = this; // Reference to the specific form
+
+				const formData = new FormData(form); // Create FormData object from the form
+
+				$.ajax({
+					type: "DELETE",
+					url: '@Url.Action("DeleteLesson", "Lesson")', // Adjust to your action
+					data: formData,
+					processData: false, // Important: prevent jQuery from transforming the data
+					contentType: false, // Important: prevent jQuery from setting the content type
+					success: () => {
+						alert("Lesson Deleted Successfully");
+					window.location.href = "/"; // Corrected location
+					},
+					error: () => {
+						// Handle error
+						window.alert("Couldn't delete lesson... Try Again Later");
+					}
+				});
+			});
+		});
+	</script>
+}
