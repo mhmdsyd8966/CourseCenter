@@ -1,5 +1,5 @@
 ﻿@model Core.Dto.CourseDto
-<form id="AddCourseForm" asp-action="AddCourse">
+<form id="AddCourseForm"  type="post">
 	@if (ViewBag.Error != null)
 	{
 		<span class="text-danger">@ViewBag.Error</span>
@@ -7,9 +7,54 @@
 	}
 	<div class="form-group">
 		<label for="CourseName">Couse Name</label>
-		<input asp-for="@Model.Name"  class="input-group" />
-		<span asp-validation-for="@Model.Name" class="text-danger"></span>
+		<input id="Name" asp-for="@Model.Name"  class="input-group" />
+		<span id="errorSpan" class="text-danger" ></span>
 	</div>
 	<br />
-	<button class="btn btn-primary" asp-action="AddCourse" asp-controller="Course">Add</button>
+	<button type="submit" class="btn btn-primary" id="formsubmit" >Add</button>
 </form>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+	$(document).ready(function () {
+		$("#AddCourseForm").on("submit", function (e) {
+			e.preventDefault()
+			var button = document.getElementById("formsubmit")
+			var formData = new FormData(this,button);
+			var name = $('#Name').val()
+			console.log(name.length)
+			if (name.length < 1) {
+				$('#errorSpan')[0].innerHTML = "The Course Name is Required!";
+			} else if (name.length < 3 || name.length > 21) {
+				$('#errorSpan')[0].innerHTML = "The Course Name must be between 4 and 21";
+			} else {
+				$.ajax({
+					type: "POST",
+					contentType: false,
+					processData: false,
+					data: formData,
+					url: "/course/AddCourse",
+					success: (data) => {
+						if(data.success){
+							
+							showPopup(data.message, "green");
+							setTimeout(() => {
+								window.location.href="/course"
+							},1500)
+							
+						}else{
+							showPopup(data.message, "red");
+						}
+						
+					},
+					error: () => {
+						alert("Couldn't add the course...Try Again latter!!")
+					}
+				})
+			}
+		})
+
+	})
+	
+
+</script>

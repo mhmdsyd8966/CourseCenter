@@ -15,6 +15,6 @@ namespace Core.Models
         public List<Course> Courses { get; set; }
         public List<Teacher> Teachers { get; set; }
         public List<Exams> Exams { get; set; }
-        public List<Grade> Grades { get; set; }
+        public List<Grade>? Grades { get; set; }
     }
 }

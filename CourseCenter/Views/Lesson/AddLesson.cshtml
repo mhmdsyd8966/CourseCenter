@@ -1,44 +1,82 @@
 ﻿@model CourseCenter.Models.AddLessonDto
-<form id="SignUpTeacher" onsubmit="AJAXSubmit(this);return false;" method="post" encrypt="multipart/form-data">
+<form id="AddLessonForm"  method="post" encrypt="multipart/form-data">
     <div class="form-group">
         <label>Name</label>
+        <span class="text-danger" id="InputSpan"></span>
         <input type="text" class="form-control" id="LessonName" asp-for="Name" />
 
     </div>
     <div class="form-group">
         <label>Description</label>
+        <span class="text-danger" id="descriptionSpan"></span>
         <input type="text" class="form-control" id="LessonDescription" asp-for="Description" />
 
     </div>
     <div class="form-group">
         <label>VideoLink</label>
+        <span id="VideoSpan" class="text-danger"></span>
         <input type="text" class="form-control" id="VideoLink" asp-for="VideoLink" />
 
     </div>
     <div class="form-group">
         <label for="Photo">Photo</label>
-        <input type="file" class="form-control" asp-for="Photo" id="Photo">
+        <span id="PhotoSpan" class="text-danger"></span>
+        <input id="PhotoInput" type="file" class="form-control" asp-for="Photo" id="Photo">
     </div>
-    <button type="submit" class="btn btn-primary" asp-action="AddLesson" asp-controller="Lesson" id="AddLesson">Submit</button>
+    <button type="submit" class="btn btn-primary"  id="AddLesson">Submit</button>
 </form>
 
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    async function AJAXSubmit(oFormElement) {
-        const formData = new FormData(oFormElement);
+    $(document).ready(function () {
+        $("#AddLessonForm").on("submit", function (e) {
+            e.preventDefault()
+            var button = document.getElementById("AddLesson")
+            var formData = new FormData(this, button);
+            console.log(formData);
+            var Name = $('#LessonName').val()
+            var Description = $('#LessonDescription').val()
+            var VideoLink = $('#VideoLink').val()
+            var Photo = $('#PhotoInput').val()
 
-        try {
-            const response = await fetch(oFormElement.action, {
-                method: 'POST',
-                body: formData
-            });
-
-            if (response.ok) {
-                window.location.href = '/';
+            if (Name.length < 1) {
+                $('#InputSpan')[0].innerHTML = "The Course Name is Required!";
             }
+            else if (Description.length < 1) {
+                $('#descriptionSpan')[0].innerHTML = "Lesson Description is Required"
+            }
+            else if (VideoLink.length<1 ){
+                $('#VideoLink')[0].innerHTML = "Lesson Video Link is Required"
+            } else if (Photo.length<1) {
+                $('#PhotoSpan')[0].innerHTML = "Lesson Photo is Required"
+            } else {
+                $.ajax({
+                    type: "POST",
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    url: "@Url.Action("AddLesson", "Lesson")",
+                    success: (data) => {
+                        if (data.success) {
 
-           
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    }
+                            showPopup(data.message, "green");
+                            setTimeout(() => {
+                                window.location.href = "/"
+                            }, 1500)
+
+                        } else {
+                            showPopup(data.message, "red");
+                        }
+                    },
+                    error: () => {
+                        
+                    }
+                    })
+            }
+        })
+
+    })
+
+
 </script>

@@ -27,29 +27,44 @@ namespace CourseCenter.Controllers
             try
             {
 				var course = await _course.AddCourse(dto);
-                return RedirectToAction("Index");
+                return Json(new
+                {
+                    Success=true,
+                    Message="Course Added Successfully"
+                });
 			}
 			catch (Exception ex)
             {
-                ViewBag.Error= ex.Message;
-                return View();
+                return Json(new
+                {
+                    Sucess = false,
+                    message = ex.Message
+                });
             }
 
         }
         [Authorize(Roles ="Admin")]
-        [HttpPost("/{id}")]
-
+        [HttpDelete]
         public async Task<IActionResult> DeleteCourse(int id)
         {
             try
             {
                 await _course.DeleteCourse(id);
-                return RedirectToAction("Index");
-            }catch(Exception ex)
+
+				return Json(new
+				{
+					Success = true,
+					Message = "Course Deleted Successfully"
+				});
+			}
+			catch(Exception ex)
             {
-                ViewBag.Error= ex.Message;
-                return View();
-            }
+				return Json(new
+				{
+					Sucess = false,
+					message = ex.Message
+				});
+			}
         }
 
 		[Authorize(Roles = "Admin")]
@@ -61,17 +76,25 @@ namespace CourseCenter.Controllers
         }
 
 		[Authorize(Roles = "Admin")]
-		[HttpPost("Course/UpdateCourse/{id}")]
+		[HttpPut("Course/UpdateCourse/{id}")]
         public async Task<IActionResult> UpdateCourse(int id,CourseDto dto)
         {
             try
             {
                 await _course.UpdateCourse(id,dto);
-                return RedirectToAction("Index");
-            }catch(Exception ex)
+                return Json(new
+                {
+                    Success = true,
+                    Message = "Course Update Successfully"
+                });
+            }
+            catch(Exception ex)
             {
-                ViewBag.Error= ex.Message;
-                return View();
+                return Json(new
+                {
+                    Sucess = false,
+                    message = ex.Message
+                });
             }
         }
     }

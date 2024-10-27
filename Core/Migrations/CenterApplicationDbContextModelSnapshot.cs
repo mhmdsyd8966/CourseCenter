@@ -42,7 +42,44 @@ namespace Core.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Courses", (string)null);
+                    b.ToTable("Courses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Arabic",
+                            NumberOfStudents = 0,
+                            NumberofTeachers = 0
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Physics",
+                            NumberOfStudents = 0,
+                            NumberofTeachers = 0
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Anatomy",
+                            NumberOfStudents = 0,
+                            NumberofTeachers = 0
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Math",
+                            NumberOfStudents = 0,
+                            NumberofTeachers = 0
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "English",
+                            NumberOfStudents = 0,
+                            NumberofTeachers = 0
+                        });
                 });
 
             modelBuilder.Entity("Core.Models.Exams", b =>
@@ -71,7 +108,7 @@ namespace Core.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("Exams", (string)null);
+                    b.ToTable("Exams");
                 });
 
             modelBuilder.Entity("Core.Models.Grade", b =>
@@ -98,7 +135,7 @@ namespace Core.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("Grades", (string)null);
+                    b.ToTable("Grades");
                 });
 
             modelBuilder.Entity("Core.Models.Lesson", b =>
@@ -133,7 +170,7 @@ namespace Core.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("Lessons", (string)null);
+                    b.ToTable("Lessons");
                 });
 
             modelBuilder.Entity("Core.Models.Question", b =>
@@ -175,7 +212,7 @@ namespace Core.Migrations
 
                     b.HasIndex("ExamsId");
 
-                    b.ToTable("Questions", (string)null);
+                    b.ToTable("Questions");
                 });
 
             modelBuilder.Entity("CourseStudent", b =>
@@ -190,7 +227,7 @@ namespace Core.Migrations
 
                     b.HasIndex("studentsId");
 
-                    b.ToTable("CourseStudent", (string)null);
+                    b.ToTable("CourseStudent");
                 });
 
             modelBuilder.Entity("ExamsStudent", b =>
@@ -205,7 +242,7 @@ namespace Core.Migrations
 
                     b.HasIndex("StudentsId");
 
-                    b.ToTable("ExamsStudent", (string)null);
+                    b.ToTable("ExamsStudent");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -440,7 +477,7 @@ namespace Core.Migrations
 
                     b.HasIndex("TeachersId");
 
-                    b.ToTable("StudentTeacher", (string)null);
+                    b.ToTable("StudentTeacher");
                 });
 
             modelBuilder.Entity("Core.Models.Admin", b =>

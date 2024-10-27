@@ -10,168 +10,135 @@
 
 
 
+
 <div class="d-flex flex-row">
-    @if (Model == null)
-    {
-        if (ViewBag.Teachers != null)
-        {
-            foreach (var Teacher in ViewBag.Teachers)
+	
+		@if (ViewBag.Teachers != null)
+		{
+            <script>
+                console.log(@ViewBag)
+            </script>
+			foreach (var Teacher in ViewBag.Teachers)
             {
                 <div class="card m-5" style="width: 18rem;">
                     <div class="card-body">
                         <h5 class="card-title">Name: @Teacher.FirstName @Teacher.LastName</h5>
                         <p class="card-text">Course: @Teacher.Course.Name</p>
                         <img class="card-img" height="250" width="250" src="/@Teacher.Photo" />
+                        
                         @if (User.IsInRole("Student"))
                         {
-                            <a asp-controller="Course" asp-action="AddStudentToTeacher" class="btn btn-primary">Add Teacher</a>
+                        if (ViewBag.CheckTeachers.Contains(Teacher.Id))
+                        {
+                            <a asp-controller="Lesson" asp-action="GetLessons" asp-route-id="@Teacher.Id" class="btn btn-dark">Lessons</a>
+
+                        }
+                        else
+                        {
+                            <button value="@Teacher.Id" type="button" onclick="AddTeacherToStudent('@Teacher.Id')" name="TeacherId" id="AddTeacher" class="btn btn-primary">Add Teacher</button>
+
+                        }
+                                
                         }
                         @if (User.IsInRole("Admin"))
                         {
-                            <button asp-controller="user" asp-action="DeleteTeacher" asp-route-id="@Teacher.Id" class="btn btn-danger">Delete Teacher</button>
+                            
+                            <button value="@Teacher.Id" type="button" onclick="DeleteTeacher('@Teacher.Id')" name="teacherId" id="DeleteTeacherButton" class="btn btn-danger">Delete Teacher</button>
+
+                            
+                        }
+                        <br />
+                        @if (User.IsInRole("Teacher") && ViewBag.Teacher == Teacher.Id)
+                        {
+                            <a asp-controller="Lesson" asp-action="GetLessons" asp-route-id="@Teacher.Id" class="btn btn-primary">Lessons</a>
+                            
+                            <button value="@ViewBag.Teacher" id="DeleteLessons" value="@Teacher.Id" name="teacherId" type="button" onclick="DeleteAllLessons('@Teacher.Id')" class="btn btn-danger">Delete All Lessons</button>
+                            
                         }
                     </div>
                 </div>
             }
         }
-    }
-    else
-    {
-        foreach (var teacher in Model)
-        {
-            <div class="card m-5" style="width: 18rem;">
-                <div class="card-body">
-                    <h5 class="card-title">Name: @teacher.FirstName @teacher.LastName</h5>
-                    <p class="card-text">Course: @teacher.Course.Name</p>
-                    <img class="card-img" height="250" width="250" src="/@teacher.Photo" />
-                    <br />
-                    @if (User.IsInRole("Student"))
-                    {
-                        if (ViewBag.Teachers.Count == 0)
-                        {
-                            <form id="AddTeacherToStudentForm-@teacher.Id">
-                                <input type="hidden" name="TeacherId" value="@teacher.Id" />
-                                <button type="submit" class="btn btn-primary">Add Teacher</button>
-                            </form>
-                        }
-                        else
-                        {
-                            @foreach (var teacherCheck in ViewBag.Teachers)
-                            {
-                                if (teacherCheck == teacher.Id)
-                                {
-                                    <a asp-controller="Lesson" asp-action="GetLessons" asp-route-id="@teacher.Id" class="btn btn-primary">Lessons</a>
-                                }
-                                else
-                                {
-                                    <button asp-controller="user" asp-action="AddStudentToTeacher" class="btn btn-primary">Add Teacher</button>
-
-                                }
-                            }
-                        }
-                    }
-                    @if (User.IsInRole("Admin"))
-                    {
-                        <form id="deleteTeacher">
-                            <input type="text" hidden value="@teacher.Id" name="teacherId" />
-                            <button class="btn btn-danger">Delete Teacher</button>
-
-                        </form>
-                        }
-                    <br />
-                    @if (User.IsInRole("Teacher") && ViewBag.Teacher == teacher.Id)
-                    {
-                        <a asp-controller="Lesson" asp-action="GetLessons" asp-route-id="@teacher.Id" class="btn btn-primary">Lessons</a>
-                        <form id="DeleteLessonsForm">
-                            <input type="text" hidden value="@teacher.Id" name="teacherId" />
-                            <button type="submit" class="btn btn-danger">Delete All Lessons</button>
-                        </form>
-                        }
-                </div>
-            </div>
-            
-        }
-    }
-   </div> 
+</div> 
 
     @section Scripts {
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
-            $(document).ready(function () {
-                // Bind submit event to all forms with the prefix
-                $("form[id^='AddTeacherToStudentForm-']").on("submit", function (e) {
-                    e.preventDefault();
-                    const form = this; // Reference to the specific form
-
-                    const formData = new FormData(form); // Create FormData object from the form
-
-                    $.ajax({
-                        type: "POST",
-                        url: '@Url.Action("AddTeacherToStudent", "user")', // Adjust to your action
-                        data: formData,
-                        processData: false, // Important: prevent jQuery from transforming the data
-                        contentType: false, // Important: prevent jQuery from setting the content type
-                        success: () => {
-                            window.location.href = "/user/GetAllTeachers"; // Corrected location
-                        },
-                        error: () => {
-                            // Handle error
-                            window.alert("Couldn't Add Teacher... Try Again Later");
-                        }
-                    });
-                });
-
-
-
+        function DeleteTeacher(id) {
             
-               
-                
-                
-            
-                
+            $.ajax({
+                type: "DELETE",
+                data: { TeacherId: id },
+                url: "/user/DeleteTeacher",
+                success: (data) => {
+                    if (data.success) {
 
-            $("#DeleteLessonsForm").on("submit", function (e) {
-                e.preventDefault();
-                const form = this;
-                const formData = new FormData(form);
-                console.log("Here");
+                        showPopup(data.message, "green");
+                        setTimeout(() => {
+                            window.location.href = "/user/GetAllTeachers"
+                        }, 1500)
 
-                $.ajax({
-                    type: "DELETE",
-                    url: '@Url.Action("DeleteAllLessons", "Lesson")',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: () => {
-                        window.location.href = "/user/GetAllTeachers"; // Fixed typo here
-                        alert("Deleted Successfully");
-                    },
-                    error: (xhr, status, error) => {
-                        alert("Error: " + xhr.responseText || "An error occurred while deleting lessons.");
+                    } else {
+                        showPopup(data.message, "red");
                     }
-                });
-            });
-
-            $("#deleteTeacher").on("submit", function (e) {
-                e.preventDefault();
-                const form = this;
-                const formData = new FormData(form);
-
-                $.ajax({
-                    type:"DELETE",
-                    url:'@Url.Action("DeleteTeacher","user")',
-                    data:formData,
-                    processData:false,
-                    contentType:false,
-                    success: () => {
-                        window.location.href = "/user/GetAllTeachers";
-                        alert("Deleted Successfully");
-                    },error:(xhr,status,error)=>{
-                        alert("Error "+ xhr.responseText || "An error occurred while deleting teacher.")
-                    }
-                })
-            })
-
-            })
+                },
+                error: () => {
+                    
+                },}
+             )}
+                
         </script>
+        <script>
+        function AddTeacherToStudent(id) {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("AddTeacherToStudent","user")',
+                data: { TeacherId :id},
+                success: (data) => {
+                    if (data.success) {
+
+                        showPopup(data.message, "green");
+                        setTimeout(() => {
+                            window.location.href = "/user/GetAllTeachers"
+                        }, 1500)
+
+                    } else {
+                        showPopup(data.message, "red");
+                    }
+                },
+                error: () => {
+
+                    
+                }
+            });
+            }
+        </script>
+
+        <script>
+        function DeleteAllLessons(id) {
+            $.ajax({
+                type: "DELETE",
+                data: { TeacherId: id },
+                url: "/Lesson/DeleteAllLessons",
+                success: (data) => {
+                    if (data.success) {
+
+                        showPopup(data.message, "green");
+                        setTimeout(() => {
+                            window.location.href = "/user/GetAllTeachers"
+                        }, 1500)
+
+                    } else {
+                        showPopup(data.message, "red");
+                    }
+                },
+                error: () => {
+                    
+
+                }
+            })
+        }
+
+        
+    </script>
     }

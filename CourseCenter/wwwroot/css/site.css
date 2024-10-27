@@ -20,3 +20,44 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+
+#popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -100%);
+    padding: 20px;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 18px;
+    text-align: center;
+    z-index: 1000;
+    animation: slideIn 0.5s forwards;
+
+    
+}
+@keyframes slideOut {
+    from {
+        top: 10%;
+        opacity: 1;
+    }
+
+    to {
+        top: 0;
+        opacity: 0;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        top: 0;
+        opacity: 0;
+    }
+
+    to {
+        top: 10%;
+        opacity: 1;
+    }
+}

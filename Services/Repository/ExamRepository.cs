@@ -25,8 +25,8 @@ namespace Services.Repository
         }
         public async Task<Exams> GetExamById(int id)
         {
-            if (id == null)
-                throw new ArgumentNullException("Id Can't be null");
+            if (id == 0)
+                throw new ArgumentNullException("Id Can't be less than 1");
             var exam = await _context.Exams.FirstOrDefaultAsync(x=>x.Id==id);
             if (exam == null)
                 throw new ArgumentNullException("There No Exam with this id");

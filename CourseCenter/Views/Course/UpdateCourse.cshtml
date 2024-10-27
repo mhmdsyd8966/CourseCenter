@@ -1,8 +1,52 @@
 ﻿@model Core.Dto.CourseDto
 
-<form id="UpdateForm" asp-action="UpdateCourse" asp-controller="Course" >
-	<span asp-validation-for="@Model.Name" class="text-danger"></span>
+<form id="UpdateForm" >
+	<span id="updateCourseErrorSpan" class="text-danger"></span>
 	<span class="text-black">Enter New Name To Course</span>
-	<input class="input-group-text" asp-for="@Model.Name"  />
-	<button class="btn btn-primary" asp-action="UpdateCourse" asp-controller="Course">Edit </button>
+	<input id="Name" class="input-group-text" asp-for="@Model.Name"  />
+	<button type="submit" class="btn btn-primary" id="formsubmit">Edit </button>
 </form>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+	$(document).ready(function () {
+		$("#UpdateForm").on("submit", function (e) {
+			e.preventDefault()
+			var button = document.getElementById("formsubmit")
+			var formData = new FormData(this, button);
+			var name = $('#Name').val()
+			console.log(name.length)
+			if (name.length < 1) {
+				$('#updateCourseErrorSpan')[0].innerHTML = "The Course Name is Required!";
+			} else if (name.length < 3 || name.length > 21) {
+				$('#updateCourseErrorSpan')[0].innerHTML = "The Course Name must be between 4 and 21";
+			} else {
+				$.ajax({
+					type: "PUT",
+					contentType: false,
+					processData: false,
+					data: formData,
+					url: "@Url.Action("UpdateCourse", "Course")",
+					success: (data) => {
+						if (data.success) {
+
+							showPopup(data.message, "green");
+							setTimeout(() => {
+								window.location.href = "/course"
+							}, 1500)
+
+						} else {
+							showPopup(data.message, "red");
+						}
+					},
+					error: () => {
+						
+					}
+				})
+			}
+		})
+
+	})
+
+
+</script>

@@ -27,21 +27,21 @@ namespace Core
                 .HasData([
                         new IdentityRole
                         {
-                            Id = Guid.NewGuid().ToString(),
+                            Id = "a332353e-b918-4e0a-8446-09135972ed8b",
                             Name = "Student",
                             NormalizedName = "STUDENT",
                             ConcurrencyStamp = null
                         },
                     new IdentityRole
                     {
-                        Id = Guid.NewGuid().ToString(),
+                        Id = "a8cc6873-26a4-4ab7-9ccf-0db3de4c4471",
                         Name = "Admin",
                         NormalizedName = "ADMIN",
                         ConcurrencyStamp = null
                     },
                     new IdentityRole
                     {
-                        Id = Guid.NewGuid().ToString(),
+                        Id = "63614cdd-fb33-472e-8c3f-83d1a75b377f",
                         Name = "Teacher",
                         NormalizedName = "TEACHER",
                         ConcurrencyStamp = null
@@ -53,6 +53,7 @@ namespace Core
             builder.Entity<Exams>().HasOne(t=>t.Teacher).WithMany(x=>x.Exams).HasForeignKey(t=>t.TeacherId).OnDelete(DeleteBehavior.Cascade);
             builder.Entity<Lesson>().HasOne(t => t.Teacher).WithMany().HasForeignKey(t => t.TeacherId).OnDelete(DeleteBehavior.Cascade);
             builder.Entity<Exams>().HasMany(t => t.Students).WithMany(x => x.Exams);
+            
 
             builder.Entity<Course>().HasData([
                 new Course

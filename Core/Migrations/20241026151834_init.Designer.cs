@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Core.Migrations
 {
     [DbContext(typeof(CenterApplicationDbContext))]
-    [Migration("20241018191826_init")]
+    [Migration("20241026151834_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -46,6 +46,43 @@ namespace Core.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Courses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Arabic",
+                            NumberOfStudents = 0,
+                            NumberofTeachers = 0
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Physics",
+                            NumberOfStudents = 0,
+                            NumberofTeachers = 0
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Anatomy",
+                            NumberOfStudents = 0,
+                            NumberofTeachers = 0
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Math",
+                            NumberOfStudents = 0,
+                            NumberofTeachers = 0
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "English",
+                            NumberOfStudents = 0,
+                            NumberofTeachers = 0
+                        });
                 });
 
             modelBuilder.Entity("Core.Models.Exams", b =>
@@ -117,6 +154,10 @@ namespace Core.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Photo")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -232,6 +273,26 @@ namespace Core.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "a332353e-b918-4e0a-8446-09135972ed8b",
+                            Name = "Student",
+                            NormalizedName = "STUDENT"
+                        },
+                        new
+                        {
+                            Id = "a8cc6873-26a4-4ab7-9ccf-0db3de4c4471",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "63614cdd-fb33-472e-8c3f-83d1a75b377f",
+                            Name = "Teacher",
+                            NormalizedName = "TEACHER"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

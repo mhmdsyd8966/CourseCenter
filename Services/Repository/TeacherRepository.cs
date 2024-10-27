@@ -38,8 +38,15 @@ namespace Services.Repository
         }
         public async Task<List<Teacher>> GetAllTeachers()
         {
-            var teachers = await _context.Teachers.Include(x => x.Course).ToListAsync();
-            return teachers;
+            try
+            {
+                var teachers = await _context.Teachers.Include(x => x.Course).ToListAsync();
+                return teachers;
+            }catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            
         }
         public async Task<List<Teacher>> GetTeachersByName(string name)
         {

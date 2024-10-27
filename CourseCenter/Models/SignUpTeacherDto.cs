@@ -1,4 +1,5 @@
 ﻿using Core.Dto;
+using System.ComponentModel.DataAnnotations;
 
 namespace CourseCenter.Models
 {

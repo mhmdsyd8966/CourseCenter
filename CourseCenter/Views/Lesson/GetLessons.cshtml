@@ -25,7 +25,7 @@
 		{
 				@foreach (var lesson in Model)
 				{
-					<div class="card" style="width: 18rem;">
+					<div class="card card-@lesson.Id" style="width: 18rem;">
 						<img class="card-img-top" src="/@lesson.Photo" alt="Card image cap">
 						<div class="card-body">
 							<h3>@lesson.Name</h3>
@@ -40,10 +40,10 @@
 						{
 							<a class="btn btn-dark" asp-action="UpdateLesson" asp-controller="Lesson" asp-route-id="@lesson.Id">Edit Lesson</a>
 
-							<form id="DeleteLesson-@lesson.Id">
+							
 								<input hidden id="lessonId" name="lessonId" value="@lesson.Id" />
-								<button  class="btn btn-danger">Delete Lesson</button>
-							</form>
+							<button type="button" value="@lesson.Id" id="DeleteLessonButton" onclick="DeleteLesson(@lesson.Id)" class="btn btn-danger">Delete Lesson</button>
+							
 						}
 						
 						
@@ -60,30 +60,28 @@
 @section Scripts {
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script>
+		function DeleteLesson(id) {
 
-		$(document).ready(function () {
-			$("form[id^='DeleteLesson-']").on("submit", function (e) {
-				e.preventDefault();
-				const form = this; // Reference to the specific form
+			$.ajax({
+				type: "DELETE",
+				data: { lessonId: id },
+				url: "/lesson/deleteLesson",
+				success: (data) => {
+					if (data.success) {
+						$(`.card-${id}`).remove();
+						showPopup(data.message, "green");
 
-				const formData = new FormData(form); // Create FormData object from the form
-
-				$.ajax({
-					type: "DELETE",
-					url: '@Url.Action("DeleteLesson", "Lesson")', // Adjust to your action
-					data: formData,
-					processData: false, // Important: prevent jQuery from transforming the data
-					contentType: false, // Important: prevent jQuery from setting the content type
-					success: () => {
-						alert("Lesson Deleted Successfully");
-					window.location.href = "/"; // Corrected location
-					},
-					error: () => {
-						// Handle error
-						window.alert("Couldn't delete lesson... Try Again Later");
+					} else {
+						showPopup(data.message, "red");
 					}
-				});
-			});
-		});
+
+				},
+				error: () => {
+
+
+				}
+			})
+		}
 	</script>
+
 }

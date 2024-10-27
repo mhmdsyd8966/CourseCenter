@@ -43,11 +43,18 @@ namespace CourseCenter.Controllers
                     await _admin.Login(login.Email, login.Password, login.IspPresistant);
                 else if (login.Role == "Teacher")
                     await _teacher.Login(login.Email, login.Password, login.IspPresistant);
-                return RedirectToAction("Index", "Home");
+                return Json(new
+                {
+                    Success = true,
+                    Message = "Successfully Logged In"
+                });
             } catch (Exception ex)
             {
-                ViewBag.Error = ex.Message;
-                return View();
+                return Json(new
+                {
+                    Success = false,
+                    Message = ex.Message
+                });
 
 
             }
@@ -56,7 +63,7 @@ namespace CourseCenter.Controllers
         public async Task<IActionResult> LogOut()
         {
             await _student.SignOut();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index","Home");
         }
         public IActionResult SignUp()
         {
@@ -65,11 +72,25 @@ namespace CourseCenter.Controllers
         [HttpPost]
         public async Task<IActionResult> SignUp(SignUpDto dto)
         {
+            try
+            {
+                var result = await _student.SignUp(dto);
 
-            var result = await _student.SignUp(dto);
-            if (result == true)
-                return RedirectToAction("SignIn");
-            return View();
+                    return Json(new
+                    {
+                        Success = true,
+                        Message = "Successfully signed Up"
+                    });
+            }catch(Exception ex)
+            {
+                return Json(new
+                {
+                    Success = false,
+                    Message =ex.Message
+            });
+            }
+            
+            
         }
         public IActionResult SignUpAdmin()
         {
@@ -78,9 +99,25 @@ namespace CourseCenter.Controllers
         [HttpPost]
         public async Task<IActionResult> SignUpAdmin(SignUpDto dto)
         {
-            var result = await _admin.SignUp(dto);
-            if (result == true)
-                return RedirectToAction("SignIn");
+            try
+            {
+                var result = await _admin.SignUp(dto);
+                if (result == true)
+                    return Json(new
+                    {
+                        Success = true,
+                        Message = "Signed Up A New Admin Successfully"
+                    });
+            }
+            catch (Exception ex)
+            {
+                return Json(new
+                {
+                    Success = false,
+                    Message = ex.Message
+                });
+            }
+            
             return View();
         }
         public async Task<IActionResult> SignUpTeacher()
@@ -99,18 +136,21 @@ namespace CourseCenter.Controllers
                 var SignUpDto = dto.ToTeacherSignUpDto();
                 SignUpDto.Photo = photo;
                 var result = await _teacher.SignUp(SignUpDto);
-                if (result == true)
-                {
                     await _course.AddTeacherToCourse(dto.CourseId);
-                    return RedirectToAction("Index", "Home");
-                }
-                return View();
+                    return Json(new
+                    {
+                        Success = true,
+                        Message = "Successfully Added new Teacher"
+                    });
+                
+                
             } catch (Exception ex)
             {
-				var courses = await _course.GetAllCourses();
-				ViewBag.Courses = courses;
-				ViewBag.Error = ex.Message;
-                return View();
+                return Json(new
+                {
+                    Success = false,
+                    Message = ex.Message
+                });
 
             }
         }
@@ -118,26 +158,35 @@ namespace CourseCenter.Controllers
         
         public async Task<IActionResult> GetAllTeachers()
         {
-			var teachers = await _teacher.GetAllTeachers();
-            
-			if (User.IsInRole("Teacher"))
-			{
-				ViewBag.Teacher = _teacherManger.GetUserId(User);
-			}
-            if (User.IsInRole("Student"))
+            try
             {
-                var student = _studentManger.GetUserId(User);
-                var teachersForStudent=await  _student.GetTeachersId(student);
-                ViewBag.Teachers = teachersForStudent;
+                var teachers = await _teacher.GetAllTeachers();
 
-            }
+                if (User.IsInRole("Teacher"))
+                {
+                    ViewBag.Teacher = _teacherManger.GetUserId(User);
+                }
+                if (User.IsInRole("Student"))
+                {
+                    var student = _studentManger.GetUserId(User);
+                    var teachersForStudent = await _student.GetTeachersId(student);
+                    ViewBag.CheckTeachers = teachersForStudent;
 
-			if (teachers == null)
+                }
+
+                if (teachers == null)
+                {
+                    ViewBag.Error = "There is no teachers yet";
+                    return View();
+                }
+                ViewBag.Teachers = teachers;
+                return View();
+            }catch (Exception ex)
             {
-                ViewBag.Error = "There is no teachers yet";
+                ViewBag.Error = ex.Message;
                 return View();
             }
-            return View(teachers);
+			
 
         }
         [HttpPost]
@@ -147,12 +196,19 @@ namespace CourseCenter.Controllers
             {
                 var user = _studentManger.GetUserId(User);
 				await _student.AddTeacherToStudent(TeacherId, user);
-				return RedirectToAction("GetAllTeachers");
-			}
+                return Json(new
+                {
+                    Success = true,
+                    Message = "Student Signed with this Teacher Successfully"
+                });
+            }
 			catch (Exception ex)
             {
-                ViewBag.Error = ex.Message;
-                return View();
+                return Json(new
+                {
+                    Success = false,
+                    Message = ex.Message
+                });
             }
             
         }
@@ -162,11 +218,19 @@ namespace CourseCenter.Controllers
             try
             {
                 await _teacher.DeleteTeacher(teacherId);
-                return RedirectToAction("GetAllTeachers");
-            }catch(Exception ex)
+                return Json(new
+                {
+                    Success = true,
+                    Message = "Successfully Deleted This Teacher"
+                });
+            }
+            catch(Exception ex)
             {
-                ViewBag.Error = ex.Message;
-                return View();
+                return Json(new
+                {
+                    Success = false,
+                    Message = ex.Message
+                });
             }
 
         }

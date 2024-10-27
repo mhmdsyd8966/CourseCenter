@@ -37,13 +37,22 @@
                     type: "PUT",
                     url: '@Url.Action("UpdateLesson", "Lesson")',
                     data: formData,
-                    processData: false, // Important: prevent jQuery from transforming the data
-                    contentType: false, // Important: prevent jQuery from setting the content type
-                    success: () => {
-                        window.location.href = "/"; // Corrected location
+                    processData: false, 
+                    contentType: false,
+                    success: (data) => {
+                        if (data.success) {
+
+                            showPopup(data.message, "green");
+                            setTimeout(() => {
+                                window.location.href = "/"
+                            }, 1500)
+
+                        } else {
+                            showPopup(data.message, "red");
+                        }
                     },
                     error: () => {
-                        // Handle error
+                        
                     }
                 });
             });

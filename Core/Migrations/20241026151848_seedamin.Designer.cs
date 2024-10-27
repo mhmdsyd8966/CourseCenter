@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Core.Migrations
 {
     [DbContext(typeof(CenterApplicationDbContext))]
-    [Migration("20241019112125_seedroles")]
-    partial class seedroles
+    [Migration("20241026151848_seedamin")]
+    partial class seedamin
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -46,6 +46,43 @@ namespace Core.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Courses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Arabic",
+                            NumberOfStudents = 0,
+                            NumberofTeachers = 0
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Physics",
+                            NumberOfStudents = 0,
+                            NumberofTeachers = 0
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Anatomy",
+                            NumberOfStudents = 0,
+                            NumberofTeachers = 0
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Math",
+                            NumberOfStudents = 0,
+                            NumberofTeachers = 0
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "English",
+                            NumberOfStudents = 0,
+                            NumberofTeachers = 0
+                        });
                 });
 
             modelBuilder.Entity("Core.Models.Exams", b =>

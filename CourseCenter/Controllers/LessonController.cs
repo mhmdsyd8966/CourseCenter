@@ -61,13 +61,21 @@ namespace CourseCenter.Controllers
 				var Id = _teacherManger.GetUserId(User);
 				lesson.TeacherId = Id;
 				await _lesson.AddLesson(lesson);
-				return RedirectToAction("GetLessons");
+                return Json(new
+                {
+                    Success = true,
+                    Message = "Lesson Added Successfully"
+                });
 
-			}catch (Exception ex)
+            }
+            catch (Exception ex)
 			{
-				ViewBag.Error = ex.Message;
-				return View("GetLessons");
-			}
+                return Json(new
+                {
+                    Success = false,
+                    Message = ex.Message
+                });
+            }
 			
 		}
 		public async Task<IActionResult> GetLesson(int id)
@@ -119,14 +127,20 @@ namespace CourseCenter.Controllers
 				}
 				updatelesson.Photo=photo;
 				await _lesson.UpdateLesson(id, updatelesson);
-				return RedirectToAction("GetLessons");
-			}catch (Exception ex)
+                return Json(new
+                {
+                    Success = true,
+                    Message = "Lesson Updated Successfully"
+                });
+            }
+            catch (Exception ex)
 			{
-				var teacherId = _teacherManger.GetUserId(User);
-				var lessons = await _lesson.GetLessonsByTeacherId(teacherId);
-				ViewBag.Error = ex.Message;
-				return View("GetLessons",lessons);
-			}
+                return Json(new
+                {
+                    Success = false,
+                    Message = ex.Message
+                });
+            }
 		}
 		
 		[HttpDelete]
@@ -136,14 +150,23 @@ namespace CourseCenter.Controllers
 			try
 			{
 				await _lesson.DeleteLessonById(lessonId);
-				return RedirectToAction("GetLessons");
-			}catch(Exception ex)
+                return Json(new
+                {
+                    Success = true,
+                    Message = "lesson Deleted Successfully"
+                });
+            }
+            catch(Exception ex)
 			{
 				var teacherId = _teacherManger.GetUserId(User);
 				var lessons = await _lesson.GetLessonsByTeacherId(teacherId);
 				ViewBag.Error = ex.Message;
-				return View("GetLessons",lessons);
-			}
+                return Json(new
+                {
+                    Success = false,
+                    Message =ex.Message
+                });
+            }
 		}
 		[HttpDelete]
 		[Authorize(Roles ="Teacher")]
@@ -151,12 +174,21 @@ namespace CourseCenter.Controllers
 		{
 			try{
 				await _lesson.DeleteLessonsByTeachrId(TeacherId);
-				return RedirectToAction("GetLessons");
-			}catch(Exception ex)
+                return Json(new
+                {
+                    Success = true,
+                    Message = "All Lessons Deleted Successfully"
+                });
+            }
+            catch(Exception ex)
 			{
 				ViewBag.Error = ex.Message;
-				return View("GetLessons");
-			}
+                return Json(new
+                {
+                    Success = true,
+                    Message = ex.Message
+                });
+            }
 		}
 	}
 }

@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace Core.Migrations
 {
     /// <inheritdoc />
@@ -291,7 +293,8 @@ namespace Core.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TeacherId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    VideoLink = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    VideoLink = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Photo = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -369,7 +372,7 @@ namespace Core.Migrations
                         column: x => x.ExamId,
                         principalTable: "Exams",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Grades_Student_StudentId",
                         column: x => x.StudentId,
@@ -401,6 +404,28 @@ namespace Core.Migrations
                         principalTable: "Exams",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { "63614cdd-fb33-472e-8c3f-83d1a75b377f", null, "Teacher", "TEACHER" },
+                    { "a332353e-b918-4e0a-8446-09135972ed8b", null, "Student", "STUDENT" },
+                    { "a8cc6873-26a4-4ab7-9ccf-0db3de4c4471", null, "Admin", "ADMIN" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Courses",
+                columns: new[] { "Id", "Name", "NumberOfStudents", "NumberofTeachers" },
+                values: new object[,]
+                {
+                    { 1, "Arabic", 0, 0 },
+                    { 2, "Physics", 0, 0 },
+                    { 3, "Anatomy", 0, 0 },
+                    { 4, "Math", 0, 0 },
+                    { 5, "English", 0, 0 }
                 });
 
             migrationBuilder.CreateIndex(

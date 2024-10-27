@@ -1,54 +1,122 @@
 ﻿@model Core.Dto.SignUpDto
-<form id="signupform" asp-action="SignUp" asp-controller="user">
+<form id="signupform" >
     <div class="form-group">
         <label for="exampleInputEmail1">Email address</label>
-        <input type="email" class="form-control" id="exampleInputEmail1" asp-for="email" aria-describedby="emailHelp" placeholder="Enter email">
+        <span id="EmailErrors" class="text-danger"></span>
+        <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" placeholder="Enter email">
         <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
     </div>
     <div class="form-group">
         <label for="exampleInputPassword1">Password</label>
-        <input type="password" class="form-control" id="exampleInputPassword1" asp-for="password" placeholder="Password">
+        <span id="passwordErrors" class="text-danger"></span>
+        <input type="password" class="form-control" id="psw" name="password" placeholder="Password">
     </div>
     <div class="form-group">
         <label for="firstname">First Name</label>
-        <input type="text" class="form-control" id="firstname" asp-for="FirstName" placeholder="FirstName">
+        <span id="FirstNameErrors" class="text-danger"></span>
+        <input type="text" class="form-control" id="first" name="FirstName" placeholder="FirstName">
     </div>
     <div class="form-group">
         <label for="lastname">Last Name</label>
-        <input type="text" class="form-control" id="lastname" asp-for="LastName" placeholder="LastName">
+        <span id="LastNameErrors" class="text-danger"></span>
+        <input type="text" class="form-control" id="last" name="LastName" placeholder="LastName">
     </div>
     <div class="form-group">
         <label for="PhoneNumber">Phone Number</label>
-        <input type="text" class="form-control" asp-for="phoneNumber" id="PhoneNumber" placeholder="Phone Number">
+        <span id="phoneNumberErros" class="text-danger"></span>
+        <input type="text" class="form-control" name="phoneNumber" id="phone" placeholder="Phone Number">
     </div>
     
 
-    <button type="submit" class="btn btn-primary" asp-action="SignUp" asp-controller="user"  asp-asp-controller="user" id="signup">Submit</button>
+    <button type="submit" class="btn btn-primary"   asp-asp-controller="user" id="signup">Submit</button>
 </form>
 
 
-@* @section Scripts {
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $("#signupform").on("submit", (e)=> {
-                e.preventDefault();
-                const form = document.getElementById("signupform");
-                var button = document.getElementById("signup");
-                var formData = new FormData(form, button);
-                var object = {};
-                formData.forEach((value, key) => object[key] = value);
-                var json = JSON.stringify(object);
-                console.log(object);
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#signupform").on("submit", function (e) {
+            e.preventDefault();
+            var form = document.getElementById("signupform");
+            var formData = new FormData(form);
+            console.log(formData);
+
+            function validateForm() {
+                let isValid = true;
+                const email = $("#email").val();
+                const password = $("#psw").val().trim();
+                const firstName = $("#first").val();
+                const lastName = $("#last").val();
+                const PhoneNumber = $("#phone").val();
+
+                $("#EmailErrors").text("");
+                $("#passwordErrors").text("");
+                $("#FirstNameErrors").text("");
+                $("#LastNameErrors").text("");
+                $("#phoneNumberErros").text("");
+
+                if (email.length < 1) {
+                    $("#EmailErrors").text("email address is required");
+                    isValid = false;
+                }
+
+                const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}$/;
+                if (!passwordPattern.test(password)) {
+                    $("#passwordErrors").text("Password must be at least 8 characters long and include a number, a lowercase letter, an uppercase letter, and a special character.");
+                    isValid = false;
+                }
+
+                if (firstName < 1) {
+                    $("#FirstNameErrors").text("first name is required");
+                    isValid = false;
+                }
+                if (firstName < 4 || firstName>12) {
+                    $("#FirstNameErrors").text("first name must be between 4 and 12 characters");
+                    isValid = false;
+                }
+                if (lastName < 1) {
+                    $("#LastNameErrors").text("last Name is required");
+                    isValid = false;
+                }
+                if (firstName < 4 || firstName > 12) {
+                    $("#LastNameErrors").text("last name must be between 4 and 12 characters");
+                    isValid = false;
+                }
+                if (PhoneNumber < 1) {
+                    $("#phoneNumberErros").text("phone number is required");
+                    isValid = false;
+                }
+
+                
+
+                return isValid;
+            }
+            if (validateForm()) {
+
 
                 $.ajax({
                     type: "POST",
-                    url: '@Url.Action("SignUp", "user")/',
-                    headers:"",
-                    success: () => { window.location.href = '/' },
-                    error: () => { }
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    url: "@Url.Action("SignUp", "user")",
+                    success: (data) => {
+                        if (data.success) {
+
+                            showPopup(data.message, "green");
+                            setTimeout(() => {
+                                window.location.href = "/"
+                            }, 1500)
+
+                        } else {
+                            showPopup(data.message, "red");
+                        }
+                    },
+                    error: () => {
+                        
+                    }
                 });
-            })
+            }
         });
-    </script>
-} *@
+    });
+</script>
