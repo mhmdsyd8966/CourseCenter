@@ -53,6 +53,7 @@ namespace Core
             builder.Entity<Exams>().HasOne(t=>t.Teacher).WithMany(x=>x.Exams).HasForeignKey(t=>t.TeacherId).OnDelete(DeleteBehavior.Cascade);
             builder.Entity<Lesson>().HasOne(t => t.Teacher).WithMany().HasForeignKey(t => t.TeacherId).OnDelete(DeleteBehavior.Cascade);
             builder.Entity<Exams>().HasMany(t => t.Students).WithMany(x => x.Exams);
+            builder.Entity<Course>().HasMany(x => x.Teachers).WithOne(x => x.Course);
             
 
             builder.Entity<Course>().HasData([

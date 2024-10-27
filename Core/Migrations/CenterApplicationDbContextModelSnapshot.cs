@@ -42,7 +42,7 @@ namespace Core.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Courses");
+                    b.ToTable("Courses", (string)null);
 
                     b.HasData(
                         new
@@ -108,7 +108,7 @@ namespace Core.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("Exams");
+                    b.ToTable("Exams", (string)null);
                 });
 
             modelBuilder.Entity("Core.Models.Grade", b =>
@@ -135,7 +135,7 @@ namespace Core.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("Grades");
+                    b.ToTable("Grades", (string)null);
                 });
 
             modelBuilder.Entity("Core.Models.Lesson", b =>
@@ -170,7 +170,7 @@ namespace Core.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("Lessons");
+                    b.ToTable("Lessons", (string)null);
                 });
 
             modelBuilder.Entity("Core.Models.Question", b =>
@@ -212,7 +212,7 @@ namespace Core.Migrations
 
                     b.HasIndex("ExamsId");
 
-                    b.ToTable("Questions");
+                    b.ToTable("Questions", (string)null);
                 });
 
             modelBuilder.Entity("CourseStudent", b =>
@@ -227,7 +227,7 @@ namespace Core.Migrations
 
                     b.HasIndex("studentsId");
 
-                    b.ToTable("CourseStudent");
+                    b.ToTable("CourseStudent", (string)null);
                 });
 
             modelBuilder.Entity("ExamsStudent", b =>
@@ -242,7 +242,7 @@ namespace Core.Migrations
 
                     b.HasIndex("StudentsId");
 
-                    b.ToTable("ExamsStudent");
+                    b.ToTable("ExamsStudent", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -477,7 +477,7 @@ namespace Core.Migrations
 
                     b.HasIndex("TeachersId");
 
-                    b.ToTable("StudentTeacher");
+                    b.ToTable("StudentTeacher", (string)null);
                 });
 
             modelBuilder.Entity("Core.Models.Admin", b =>

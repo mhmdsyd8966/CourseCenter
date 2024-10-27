@@ -24,15 +24,18 @@
                         <p class="card-text">Course: @Teacher.Course.Name</p>
                         <img class="card-img" height="250" width="250" src="/@Teacher.Photo" />
                         
+                        
                         @if (User.IsInRole("Student"))
                         {
                         if (ViewBag.CheckTeachers.Contains(Teacher.Id))
                         {
+                            <br />
                             <a asp-controller="Lesson" asp-action="GetLessons" asp-route-id="@Teacher.Id" class="btn btn-dark">Lessons</a>
 
                         }
                         else
                         {
+                            <br />
                             <button value="@Teacher.Id" type="button" onclick="AddTeacherToStudent('@Teacher.Id')" name="TeacherId" id="AddTeacher" class="btn btn-primary">Add Teacher</button>
 
                         }
@@ -40,7 +43,7 @@
                         }
                         @if (User.IsInRole("Admin"))
                         {
-                            
+                            <br />
                             <button value="@Teacher.Id" type="button" onclick="DeleteTeacher('@Teacher.Id')" name="teacherId" id="DeleteTeacherButton" class="btn btn-danger">Delete Teacher</button>
 
                             
@@ -48,13 +51,14 @@
                         <br />
                         @if (User.IsInRole("Teacher") && ViewBag.Teacher == Teacher.Id)
                         {
+                            <br />
                             <a asp-controller="Lesson" asp-action="GetLessons" asp-route-id="@Teacher.Id" class="btn btn-primary">Lessons</a>
                             
                             <button value="@ViewBag.Teacher" id="DeleteLessons" value="@Teacher.Id" name="teacherId" type="button" onclick="DeleteAllLessons('@Teacher.Id')" class="btn btn-danger">Delete All Lessons</button>
                             
                         }
                     </div>
-                </div>
+                </div><br />
             }
         }
 </div> 
