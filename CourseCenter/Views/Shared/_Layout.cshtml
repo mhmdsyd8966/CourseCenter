@@ -7,7 +7,8 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/CourseCenter.styles.css" asp-append-version="true" />
-    
+
+    <script src="/js/jquery-3.7.1.min.js"></script>
 </head>
 <body>
     <div id="popup"></div>
@@ -35,14 +36,15 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="user" asp-action="SignUpAdmin">SignUp Admin</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Course" asp-action="Index">Courses</a>
+                            </li>
                         }
                         
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="user" asp-action="GetAllTeachers">Teachers</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Course" asp-action="Index">Courses</a> 
-                        </li>
+                        
                             
                         
                     </ul>

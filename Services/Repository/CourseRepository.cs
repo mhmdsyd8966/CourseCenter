@@ -63,7 +63,7 @@ namespace Services.Repository
         }
         public async Task<Course> GetCourseById(int Id)
         {
-            return await _context.Courses.FirstOrDefaultAsync(x => x.Id == Id);
+            return await _context.Courses.Include(x=>x.Teachers).FirstOrDefaultAsync(x => x.Id == Id);
         }
         public async Task<bool> AddTeacherToCourse(int CourseId)
         {
